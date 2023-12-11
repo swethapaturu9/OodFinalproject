@@ -1,5 +1,5 @@
 package com.oodProject.library.pojo;
 
-public class Member {
+public class Member extends Person {
 
 }

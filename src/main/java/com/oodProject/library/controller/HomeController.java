@@ -35,5 +35,12 @@ public class HomeController {
 		
 		return "librarian_login";
 	}
+	
+	
+	@GetMapping("/MemberLogin")
+	public String memberLogin(Model model) {
+		
+	        return "member_login";
+	}
 
 }
