@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>NU Library</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css">
+</head>
+<body>
+	<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+      <h2>NU Library</h2>
+    </div>
+  </div>
+    <div class="container mt-5">
+    <div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+      <h3><a th:href="@{/AdminLogin}" class="btn btn-primary btn-lg btn-block">Login as Admin</a></h3>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+      <h3><a th:href="@{/MemberLogin}" class="btn btn-primary btn-lg btn-block">Login as Member</a></h3>
+    </div>
+  </div>
+   <div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+      <h3><a th:href="@{/LibrarianLogin}" class="btn btn-primary btn-lg btn-block">Login as Librarian</a></h3>
+    </div>
+  </div>
+  </div>
+</div>
+</body>
+</html>
