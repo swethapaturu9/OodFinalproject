@@ -25,4 +25,3 @@ public class PrivateRoom {
         System.out.println("Room Number: " + roomNumber + ", Occupied: " + isOccupied);
     }
 }
-}

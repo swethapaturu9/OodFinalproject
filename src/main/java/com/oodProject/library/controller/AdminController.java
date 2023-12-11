@@ -75,7 +75,13 @@ public class AdminController {
     	
     	 libraryService.getAllApplications().remove(declinedApplication);
     	 
-    	 return "admin_dashboard";
+       List<Book> books = libraryService.getAllBooks();
+  	   List<Application> applications = libraryService.getAllApplications();
+  	   List<Librarian> librarians = libraryService.getAllLibrarians();
+         model.addAttribute("books", books);
+         model.addAttribute("applications", applications);
+         model.addAttribute("librarians",librarians);
+         return "admin_dashboard"; 
     	
     	
     }
@@ -99,7 +105,7 @@ public class AdminController {
         libraryService.getAllApplications().remove(acceptedApplication);
 
         
-        String filePath = "/Users/swethapaturu/Desktop/OodFinalproject/credentials";
+        String filePath = "../../../../../../../credentials";
         
         
         List<String[]> data = new ArrayList<>();
