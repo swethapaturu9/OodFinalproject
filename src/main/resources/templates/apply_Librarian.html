@@ -32,11 +32,18 @@
                 <textarea id="Reason" name="Reason" th:field="*{Reason}" class="form-control" placeholder="Why are you applying ?" required></textarea>
             </div>
             <div class="form-group">
-                <label for="Experience">Reason for Applying:</label>
+                <label for="Experience">Previous Experience:</label>
                 <textarea id="Experience" name="Experience" th:field="*{Experience}" class="form-control" placeholder="Do you have any previous experience as Librarian ?  " required></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Submit Application</button>
         </form>
     </div>
+    <div class="container" style="margin-top: 50px;">
+		<a th:href="@{/LibrarianLogin}">Go Back</a><br><br>
+	</div>
+	<div class="container" style="margin-top: 50px;">
+		<a th:href="@{/}">Home</a>
+    </div>
+    
 </body>
 </html>
