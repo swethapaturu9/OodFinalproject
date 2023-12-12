@@ -15,7 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.oodProject.library.pojo.Application;
 import com.oodProject.library.pojo.Book;
 import com.oodProject.library.pojo.Library;
+import com.oodProject.library.pojo.Person;
 import com.oodProject.library.util.CsvFileUtil;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import com.oodProject.library.pojo.Librarian;
 
 
@@ -32,8 +36,15 @@ public class AdminController {
     @PostMapping("/AdminLogin")
     public String handleAdminLogin(@RequestParam String username, 
                                    @RequestParam String password, 
-                                   Model model) {
+                                   Model model, HttpServletRequest request) {
         if (libraryService.authenticateAdmin(username, password)) {
+        		Person admin = new Person();
+        		admin.setRole("Administrator");
+        		admin.setUsername(username);
+        		admin.setPassword(password);
+        		
+        		request.getSession().setAttribute("user", admin);
+        		
         	   List<Book> books = libraryService.getAllBooks();
         	   List<Application> applications = libraryService.getAllApplications();
         	   List<Librarian> librarians = libraryService.getAllLibrarians();
@@ -49,8 +60,11 @@ public class AdminController {
     }
     
     @PostMapping("/acceptApplication")
-    public String acceptApplication(@RequestParam("applicationId") int applicationId, Model model) {
+    public String acceptApplication(@RequestParam("applicationId") int applicationId, Model model, HttpServletRequest request) {
     	
+    	
+    	Person adminData = (Person)request.getSession().getAttribute("user");
+    	System.out.println(adminData.getUsername()+" "+adminData.getRole());
     	
         Application acceptedApplication = libraryService.getApplicationById(applicationId);
  

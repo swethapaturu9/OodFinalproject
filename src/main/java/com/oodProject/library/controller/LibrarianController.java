@@ -14,6 +14,9 @@ import com.oodProject.library.pojo.Application;
 import com.oodProject.library.pojo.Book;
 import com.oodProject.library.pojo.Librarian;
 import com.oodProject.library.pojo.Library;
+import com.oodProject.library.pojo.Person;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 
 @Controller
@@ -62,11 +65,14 @@ public class LibrarianController {
 	
 	
 	@PostMapping("/LibrarianLogin") 
-	public String loginCheck(@RequestParam String username, @RequestParam String password, Model model) {
+	public String loginCheck(@RequestParam String username, @RequestParam String password, Model model, HttpServletRequest request) {
 		
 		if (libraryService.authenticateLibrarian(username, password)) {
-		
+			
 			Librarian librarian = libraryService.getLibrarianByusername(username);
+			Person librarianPersonType = (Person)librarian;
+			librarianPersonType.setRole("Lib");
+			request.getSession().setAttribute("user", librarianPersonType);
 			
 			
 			List<Book> returnRequests = libraryService.getBorrowRequests(librarian);
