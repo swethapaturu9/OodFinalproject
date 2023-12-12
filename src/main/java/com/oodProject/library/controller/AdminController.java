@@ -18,7 +18,7 @@ import com.oodProject.library.pojo.Library;
 import com.oodProject.library.pojo.Person;
 import com.oodProject.library.util.CsvFileUtil;
 
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 import com.oodProject.library.pojo.Librarian;
 
@@ -36,14 +36,14 @@ public class AdminController {
     @PostMapping("/AdminLogin")
     public String handleAdminLogin(@RequestParam String username, 
                                    @RequestParam String password, 
-                                   Model model, HttpServletRequest request) {
+                                   Model model, HttpSession session) {
         if (libraryService.authenticateAdmin(username, password)) {
         		Person admin = new Person();
         		admin.setRole("Administrator");
         		admin.setUsername(username);
         		admin.setPassword(password);
         		
-        		request.getSession().setAttribute("user", admin);
+        		session.setAttribute("admin", admin);
         		
         	   List<Book> books = libraryService.getAllBooks();
         	   List<Application> applications = libraryService.getAllApplications();
@@ -60,10 +60,10 @@ public class AdminController {
     }
     
     @PostMapping("/acceptApplication")
-    public String acceptApplication(@RequestParam("applicationId") int applicationId, Model model, HttpServletRequest request) {
+    public String acceptApplication(@RequestParam("applicationId") int applicationId, Model model, HttpSession session) {
     	
     	
-    	Person adminData = (Person)request.getSession().getAttribute("user");
+    	Person adminData = (Person)session.getAttribute("admin");
     	System.out.println(adminData.getUsername()+" "+adminData.getRole());
     	
         Application acceptedApplication = libraryService.getApplicationById(applicationId);
@@ -119,7 +119,7 @@ public class AdminController {
         libraryService.getAllApplications().remove(acceptedApplication);
 
         
-        String filePath = "/Users/swethapaturu/Desktop/OodFinalproject/credentials";
+        String filePath = "credentials";
         
         
         List<String[]> data = new ArrayList<>();
