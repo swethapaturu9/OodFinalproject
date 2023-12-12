@@ -18,14 +18,30 @@
                     <th>ID</th>
                     <th>Title</th>
                     <th>Author</th>
+                    <th> Requested By </th>
                     <!-- Add more headers as per Book attributes -->
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="book : ${borrowRequests}">
-                    <td th:text="${book.id}"></td>
+                    <td th:text="${book.bookId}"></td>
                     <td th:text="${book.title}"></td>
                     <td th:text="${book.author}"></td>
+                    <td th:text="${book.borrowedBy != null ? book.borrowedBy.firstName + ' ' + book.borrowedBy.lastName : 'Not Requested'}"></td>
+                    <td>
+                        <!-- Accept Form -->
+                        <form th:action="@{/acceptBorrowRequest}" method="post">
+                            <input type="hidden" name="bookId" th:value="${book.bookId}" />
+                            <button type="submit" class="btn btn-success">Accept</button>
+                        </form>
+
+                        <!-- Decline Form -->
+                        <form th:action="@{/declineBorrowRequest}" method="post">
+                            <input type="hidden" name="bookId" th:value="${book.bookId}" />
+                            <button type="submit" class="btn btn-danger">Decline</button>
+                        </form>
+                    </td>
+                     
                     <!-- Add more cells as per Book attributes -->
                 </tr>
             </tbody>
@@ -44,7 +60,7 @@
             </thead>
             <tbody>
                 <tr th:each="book : ${returnRequests}">
-                    <td th:text="${book.id}"></td>
+                    <td th:text="${book.bookId}"></td>
                     <td th:text="${book.title}"></td>
                     <td th:text="${book.author}"></td>
                     <!-- Add more cells as per Book attributes -->
