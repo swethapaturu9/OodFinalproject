@@ -14,6 +14,9 @@ import com.oodProject.library.pojo.Application;
 import com.oodProject.library.pojo.Book;
 import com.oodProject.library.pojo.Librarian;
 import com.oodProject.library.pojo.Library;
+import com.oodProject.library.pojo.Member;
+
+import jakarta.servlet.http.HttpSession;
 
 
 @Controller
@@ -62,16 +65,16 @@ public class LibrarianController {
 	
 	
 	@PostMapping("/LibrarianLogin") 
-	public String loginCheck(@RequestParam String username, @RequestParam String password, Model model) {
+	public String loginCheck(@RequestParam String username, @RequestParam String password, Model model, HttpSession session) {
 		
 		if (libraryService.authenticateLibrarian(username, password)) {
 		
 			Librarian librarian = libraryService.getLibrarianByusername(username);
 			
+			session.setAttribute("librarian", librarian);
 			
-			List<Book> returnRequests = libraryService.getBorrowRequests(librarian);
-			
-			List<Book> borrowRequests = libraryService.getReturnRequests(librarian);
+			List<Book> returnRequests = libraryService.getReturnRequests(librarian);			
+			List<Book> borrowRequests = libraryService.getBorrowRequests(librarian);
 			
 		
 			model.addAttribute("borrowRequests",borrowRequests);
@@ -87,6 +90,55 @@ public class LibrarianController {
        return "librarian_login"; 
     
 		
+	}
+	
+	
+	@PostMapping("/acceptBorrowRequest")
+	public String acceptBorrowRequest(@RequestParam("bookId") int bookId, HttpSession session, Model model) {
+		
+		Book book = libraryService.getBookByid(bookId);
+		
+		Member member = book.getBorrowedBy();
+		
+		System.out.println("borrowed by" + member.getFirstName());
+		
+	
+		book.setBorrowed(true);
+		
+		libraryService.getBorrowedBooks().add(book);
+		
+		
+		member.getBooksBorrowed().add(book);
+		
+		System.out.println("borrow request size" + member.getBorrowRequests().size());
+			
+		
+		libraryService.deleteBook(member.getBorrowRequests(), bookId);
+		
+		
+		libraryService.deleteBook(libraryService.getAllBooks(), bookId);
+		
+		
+		Librarian librarian = (Librarian) session.getAttribute("librarian");
+		
+		
+
+		
+		System.out.println("librarian" + librarian.getFirstName());
+		
+		System.out.println("lib borrow request size" + librarian.getBorrowRequests().size());
+		
+		
+		
+		libraryService.deleteBook(librarian.getBorrowRequests(), bookId);
+		
+		model.addAttribute("message", "borrow request accepted");
+		
+		model.addAttribute("librarian",librarian);
+	
+		return "librarian_home";
+		
+
 	}
 	
 	

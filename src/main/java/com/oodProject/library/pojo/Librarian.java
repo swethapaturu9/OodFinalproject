@@ -2,6 +2,8 @@ package com.oodProject.library.pojo;
 
 import java.util.List;
 
+import java.util.ArrayList;
+
 public class Librarian extends Person{
 	
 
@@ -13,6 +15,14 @@ public class Librarian extends Person{
 	private List<Book> borrowRequests;
 	
 	private List<Book> returnRequests;
+	
+	public Librarian() {
+		
+		borrowRequests = new ArrayList<>();
+		returnRequests = new ArrayList<>();
+		hoursWorked = 0;
+		
+	}
 
 	public int getId() {
 		return id;
