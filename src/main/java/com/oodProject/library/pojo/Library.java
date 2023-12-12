@@ -117,13 +117,13 @@ import com.oodProject.library.util.CsvFileUtil;
 
 	public boolean authenticateLibrarian(String username, String password) {
 		
-		String filePath = "../../../../../../../credentials"; 
+		String filePath = "credentials"; 
 		
 		List<String[]> users = CsvFileUtil.readCSV(filePath);
 		
-		
+		System.out.println(users.get(0));
 		for (String[] librarian : users) {
-	        
+	        System.out.println(librarian[0]);
 	        String csvUsername = librarian[1];
 	        
 	       
