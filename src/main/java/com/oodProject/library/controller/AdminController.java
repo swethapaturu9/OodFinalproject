@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.oodProject.library.pojo.Application;
 import com.oodProject.library.pojo.Book;
 import com.oodProject.library.pojo.Library;
+
+import com.oodProject.library.pojo.Member;
 import com.oodProject.library.pojo.Person;
+import com.oodProject.library.pojo.PrivateRoom;
 import com.oodProject.library.util.CsvFileUtil;
 
 import jakarta.servlet.http.HttpSession;
@@ -48,9 +51,12 @@ public class AdminController {
         	   List<Book> books = libraryService.getAllBooks();
         	   List<Application> applications = libraryService.getAllApplications();
         	   List<Librarian> librarians = libraryService.getAllLibrarians();
+        	   List<PrivateRoom> privateRooms = libraryService.getAllRooms();
                model.addAttribute("books", books);
                model.addAttribute("applications", applications);
                model.addAttribute("librarians",librarians);
+               model.addAttribute("privaterooms", privateRooms);
+               
                return "admin_dashboard"; 
         } else {
         	
