@@ -68,7 +68,7 @@ public class LibrarianController {
 	public String loginCheck(@RequestParam String username, @RequestParam String password, Model model, HttpSession session) {
 		
 		if (libraryService.authenticateLibrarian(username, password)) {
-		
+			
 			Librarian librarian = libraryService.getLibrarianByusername(username);
 			
 			session.setAttribute("librarian", librarian);

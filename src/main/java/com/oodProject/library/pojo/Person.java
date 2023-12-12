@@ -15,6 +15,19 @@ public class Person {
 	
 	private String role;
 	
+	public Person()
+	{
+		
+	}
+	public Person(String firstname, String lastname, String username, String password, String role)
+	{
+		this.firstName=firstname;
+		this.lastName=lastname;
+		this.username=username;
+		this.password=password;
+		this.role=role;
+	}
+	
 	public String getUsername() {
 		return username;
 	}
