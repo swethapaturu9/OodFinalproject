@@ -1,9 +1,11 @@
 package com.oodProject.library.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,6 +65,8 @@ public class MemberController {
 		    List<PrivateRoom> rooms = member.getRoomsBooked();
 		    
 		    List<Librarian> librarians = libraryService.getAllLibrarians();
+		    
+		    List<PrivateRoom> roomsAvailable = libraryService.getAvailableRooms();
 			
 		
 			model.addAttribute("books",books);
@@ -78,6 +82,8 @@ public class MemberController {
 			model.addAttribute("member",member);
 			
 			model.addAttribute("librarians", librarians);
+			
+			model.addAttribute("availableRooms", roomsAvailable);
 			
 			
 			
@@ -152,6 +158,27 @@ public class MemberController {
     	
     	return "success_page";
     	
+    }
+    
+    @PostMapping("/requestPrivateRoom")
+    public String requestPrivateRoom(@RequestParam("roomId") int roomId, HttpSession session, Model model, @RequestParam("fromDateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fromDateTime,@RequestParam("toDateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime toDateTime)
+    {
+    	
+    	Member member = (Member) session.getAttribute("member");
+    	
+    	PrivateRoom room = libraryService.getRoomById(roomId);
+    	
+    	room.setRentedBy(member);
+    	room.setOccupied(true);
+    	room.setFromDateTime(fromDateTime);
+    	room.setToDateTime(toDateTime);
+    	
+    	libraryService.removeRoomFromAvailablity(libraryService.getAvailableRooms(), roomId);
+    	
+    	member.getRoomsBooked().add(room);
+    	
+    	
+    	return "request_success";
     }
 	
 	
