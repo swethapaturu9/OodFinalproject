@@ -168,4 +168,20 @@ public class AdminController {
 		return "librarianSearchResults";
 	}
 
+	@GetMapping("/admin/searchApplications")
+	public String searchApplications(@RequestParam String keyword, Model model) {
+		List<Application> applications = libraryService.getAllApplications().stream()
+				.filter(application -> application.getFirstName().toLowerCase().contains(keyword.toLowerCase())
+						|| application.getLastName().toLowerCase().contains(keyword.toLowerCase())
+						|| application.getReason().toLowerCase().contains(keyword.toLowerCase())
+						|| application.getExperience().toLowerCase().contains(keyword.toLowerCase()))
+				.toList();
+		if (applications.isEmpty()) {
+			model.addAttribute("errorMessage", "No applications found for the given keyword");
+		} else {
+			model.addAttribute("librarians", applications);
+		}
+		return "applicationSearchResults";
+	}
+
 }
