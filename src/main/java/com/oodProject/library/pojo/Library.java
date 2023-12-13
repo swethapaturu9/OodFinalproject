@@ -25,6 +25,10 @@ import com.oodProject.library.util.CsvFileUtil;
 	
 	private  List<PrivateRoom> rooms;
 	
+	private List<PrivateRoom> availableRooms;
+	
+	private List<PrivateRoom> occupiedRooms;
+	
 	private  List<Book> books;
 	
 	private  List<Book> borrowedBooks;
@@ -44,11 +48,20 @@ import com.oodProject.library.util.CsvFileUtil;
 	            return new Book(bookId, title, author, genre, language);
 	        }
 	    }
+	 
+	 private static class RoomsFactory {
+	        public static PrivateRoom createRoom(String[] data) {
+	            int roomId = Integer.parseInt(data[0]);
+	            int roomNumber = Integer.parseInt(data[1]);
+	            return new PrivateRoom(roomId, roomNumber);
+	        }
+	    }
 	
 	
 	 public Library(@Value("${library.books.csv.path}") String booksCSV,
              @Value("${library.admin.username}") String username,
-             @Value("${library.admin.password}") String password) {
+             @Value("${library.admin.password}") String password,
+             @Value("${library.privaterooms.csv.path}") String roomsCSV) {
 		
 		
 		books = new ArrayList<>();
@@ -56,6 +69,9 @@ import com.oodProject.library.util.CsvFileUtil;
 		librarians = new ArrayList<>();
 		members = new ArrayList<>();
 		borrowedBooks = new ArrayList<>();
+		rooms = new ArrayList<>();
+		availableRooms = new ArrayList<>();
+		occupiedRooms = new ArrayList<>();
 		
         List<String[]> rawData = CsvFileUtil.readCSV(booksCSV);
 
@@ -63,6 +79,15 @@ import com.oodProject.library.util.CsvFileUtil;
         for (int i = 0; i < rawData.size(); i++) {
             Book book = BookFactory.createBook(rawData.get(i));
             books.add(book);
+        }
+        
+        List<String[]> roomsRawData = CsvFileUtil.readCSV(roomsCSV);
+        
+        for(int i=0; i< roomsRawData.size(); i++)
+        {
+        	PrivateRoom privateRoom = RoomsFactory.createRoom(roomsRawData.get(i));
+        	rooms.add(privateRoom);
+        	availableRooms.add(privateRoom);
         }
         
         admin = new Person();
@@ -281,7 +306,52 @@ public void setBorrowedBooks(List<Book> borrowedBooks) {
    public void deleteBook(List<Book> books, int id) {
 	    books.removeIf(book -> book.getBookId() == id);
 	}
-
+   
+   public List<PrivateRoom> getAllRooms()
+   {
+	   return this.rooms;
+   }
+   
+   public List<PrivateRoom> getAvailableRooms()
+   {
+	   return this.availableRooms;
+   }
+   
+   public void setAvailableRooms(List<PrivateRoom> availableRooms)
+   {
+	   this.availableRooms=availableRooms;
+   }
+   
+   public void removeRoomFromAvailablity(List<PrivateRoom> availalbleRooms, int roomId)
+   {
+	   availableRooms.removeIf(room -> room.getRoomId() == roomId);
+	   addRoomsToOccupiedStatus(roomId);
+	   
+   }
+   
+   public PrivateRoom getRoomById(int roomId)
+   {
+	   for (PrivateRoom room: rooms)
+	   {
+		   if(room.getRoomId() == roomId)
+		   {
+			   return room;
+		   }
+	   }
+	   return null;
+   }
+   
+   public List<PrivateRoom> getOcccupiedRooms()
+   {
+	   return this.occupiedRooms;
+   }
+   
+   public void addRoomsToOccupiedStatus(int roomId)
+   {
+	   PrivateRoom roomDetails = getRoomById(roomId);
+	   roomDetails.setOccupied(true);
+	   occupiedRooms.add(roomDetails);
+   }
 
 	public List<Book> searchBooks(List<Book> books, String query) {
 		return books.stream()

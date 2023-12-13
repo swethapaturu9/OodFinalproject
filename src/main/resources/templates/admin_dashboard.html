@@ -110,6 +110,27 @@
             </tbody>
         </table>
         
+        <h2>Privaterooms for Members</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Number</th>
+                    <th>Occupied</th>
+                    <th>Username</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="privateRoom : ${privaterooms}">
+   
+                    <td th:text="${privateRoom.roomId}"></td>
+                    <td th:text="${privateRoom.roomNumber}"></td>
+                    <td th:text="${privateRoom.isOccupied}"></td>
+                    <td th:text="${privateRoom.isOccupied} ? ${privateRoom.rentedBy.username} : 'Not Rented'"></td>
+                </tr>
+            </tbody>
+        </table>
+        
         </div>
          
        
