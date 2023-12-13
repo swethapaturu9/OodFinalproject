@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Librarian Search Results</title>
+</head>
+
+<body>
+	<h2>Librarian Search Results</h2>
+
+	<div th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+	<table th:if="${not #lists.isEmpty(librarians)}">
+		<!-- ... (table structure for librarians) -->
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Username</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="librarian : ${librarians}">
+				<td th:text="${librarian.id}"></td>
+				<td th:text="${librarian.firstName + ' ' + librarian.lastName}"></td>
+				<td th:text="${librarian.username}"></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+
+</html>

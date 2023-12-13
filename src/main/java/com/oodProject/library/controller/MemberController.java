@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.oodProject.library.pojo.Book;
 import com.oodProject.library.pojo.Librarian;
@@ -31,6 +30,8 @@ public class MemberController {
 
 	@Autowired
 	private final Library libraryService;
+	
+	private static final String ERRORMESSAGE = "No books found for the given keyword";
 
     public MemberController(Library libraryService) {
         this.libraryService = libraryService;
@@ -160,6 +161,53 @@ public class MemberController {
     	
     }
     
+	@GetMapping("/member/searchBooks")
+	public String searchBooks(@RequestParam String keyword, Model model, HttpSession session) {
+		List<Book> books = libraryService.searchBooks(libraryService.getAllBooks(), keyword);
+		if (books.isEmpty()) {
+			model.addAttribute("errorMessage", ERRORMESSAGE);
+		} else {
+			model.addAttribute("books", books);
+		}
+		return "bookSearchResults";
+	}
+
+	@GetMapping("/member/searchBooksBorrowed")
+	public String searchBooksBorrowed(@RequestParam String keyword, Model model, HttpSession session) {
+		Member member = (Member) session.getAttribute("member");
+		List<Book> books = libraryService.searchBooks(member.getBooksBorrowed(), keyword);
+		if (books.isEmpty()) {
+			model.addAttribute("errorMessage", ERRORMESSAGE);
+		} else {
+			model.addAttribute("books", books);
+		}
+		return "bookSearchResults";
+	}
+
+	@GetMapping("/member/searchBorrowRequests")
+	public String searchBorrowRequests(@RequestParam String keyword, Model model, HttpSession session) {
+		Member member = (Member) session.getAttribute("member");
+		List<Book> books = libraryService.searchBooks(member.getBorrowRequests(), keyword);
+		if (books.isEmpty()) {
+			model.addAttribute("errorMessage", ERRORMESSAGE);
+		} else {
+			model.addAttribute("books", books);
+		}
+		return "bookSearchResults";
+	}
+
+	@GetMapping("/member/searchReturnRequests")
+	public String searchReturnRequests(@RequestParam String keyword, Model model, HttpSession session) {
+		Member member = (Member) session.getAttribute("member");
+		List<Book> books = libraryService.searchBooks(member.getReturnRequests(), keyword);
+		if (books.isEmpty()) {
+			model.addAttribute("errorMessage", ERRORMESSAGE);
+		} else {
+			model.addAttribute("books", books);
+		}
+		return "bookSearchResults";
+	}
+=======
     @PostMapping("/requestPrivateRoom")
     public String requestPrivateRoom(@RequestParam("roomId") int roomId, HttpSession session, Model model, @RequestParam("fromDateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fromDateTime,@RequestParam("toDateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime toDateTime)
     {
@@ -180,7 +228,5 @@ public class MemberController {
     	
     	return "request_success";
     }
-	
-	
 
 }

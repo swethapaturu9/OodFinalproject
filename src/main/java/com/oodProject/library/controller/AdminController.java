@@ -1,8 +1,7 @@
 package com.oodProject.library.controller;
 
-import java.util.List;
-
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.oodProject.library.pojo.Application;
 import com.oodProject.library.pojo.Book;
+import com.oodProject.library.pojo.Librarian;
 import com.oodProject.library.pojo.Library;
 
 import com.oodProject.library.pojo.Member;
@@ -22,8 +22,6 @@ import com.oodProject.library.pojo.PrivateRoom;
 import com.oodProject.library.util.CsvFileUtil;
 
 import jakarta.servlet.http.HttpSession;
-
-import com.oodProject.library.pojo.Librarian;
 
 
 @Controller
@@ -144,16 +142,46 @@ public class AdminController {
         return "add_librarian"; 
     }
     
-    
-    
-   
+	@GetMapping("/admin/searchBooks")
+	public String searchBooks(@RequestParam String keyword, Model model) {
+		List<Book> books = libraryService.searchBooks(libraryService.getAllBooks(), keyword);
+		if (books.isEmpty()) {
+			model.addAttribute("errorMessage", "No books found for the given keyword");
+		} else {
+			model.addAttribute("books", books);
+		}
+		return "bookSearchResults";
+	}
 
-    
+	@GetMapping("/admin/searchLibrarians")
+	public String searchLibrarians(@RequestParam String keyword, Model model) {
+		List<Librarian> librarians = libraryService.getAllLibrarians().stream()
+				.filter(librarian -> librarian.getFirstName().toLowerCase().contains(keyword.toLowerCase())
+						|| librarian.getLastName().toLowerCase().contains(keyword.toLowerCase())
+						|| librarian.getUsername().toLowerCase().contains(keyword.toLowerCase()))
+				.toList();
+		if (librarians.isEmpty()) {
+			model.addAttribute("errorMessage", "No librarians found for the given keyword");
+		} else {
+			model.addAttribute("librarians", librarians);
+		}
+		return "librarianSearchResults";
+	}
 
-    
-  
-    
-    
-    
+	@GetMapping("/admin/searchApplications")
+	public String searchApplications(@RequestParam String keyword, Model model) {
+		List<Application> applications = libraryService.getAllApplications().stream()
+				.filter(application -> application.getFirstName().toLowerCase().contains(keyword.toLowerCase())
+						|| application.getLastName().toLowerCase().contains(keyword.toLowerCase())
+						|| application.getReason().toLowerCase().contains(keyword.toLowerCase())
+						|| application.getExperience().toLowerCase().contains(keyword.toLowerCase()))
+				.toList();
+		if (applications.isEmpty()) {
+			model.addAttribute("errorMessage", "No applications found for the given keyword");
+		} else {
+			model.addAttribute("librarians", applications);
+		}
+		return "applicationSearchResults";
+	}
 
 }

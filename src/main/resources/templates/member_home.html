@@ -13,6 +13,12 @@
             <span th:text="${message}"></span>
         </div>
     
+	<h2>Search Books</h2>
+	<form th:action="@{/member/searchBooks}" method="get">
+		<label for="bookSearch">Search:</label>
+		<input type="text" id="bookSearch" name="keyword" />
+		<button type="submit" class="btn btn-primary">Search</button>
+	</form>
     <h2>Books in Library</h2>
         <table class="table">
             <thead>
@@ -51,7 +57,12 @@
         </table>
         
         
-        
+		<h2>Search Books Borrowed</h2>
+		<form th:action="@{/member/searchBooksBorrowed}" method="get">
+			<label for="booksBorrowedSearch">Search:</label>
+			<input type="text" id="booksBorrowedSearch" name="keyword" />
+			<button type="submit" class="btn btn-primary">Search</button>
+		</form>
         <h2>Books Borrowed</h2>
         <table class="table">
             <thead>
@@ -74,6 +85,12 @@
             </tbody>
         </table>
         
+		<h2>Search Borrow Requests</h2>
+		<form th:action="@{/member/searchBorrowRequests}" method="get">
+			<label for="borrowRequestsSearch">Search:</label>
+			<input type="text" id="borrowRequestsSearch" name="keyword" />
+			<button type="submit" class="btn btn-primary">Search</button>
+		</form>
          <h2>Borrow Requests</h2>
         <table class="table">
             <thead>

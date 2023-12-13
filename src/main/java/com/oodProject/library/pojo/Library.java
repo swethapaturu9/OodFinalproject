@@ -1,6 +1,7 @@
 package com.oodProject.library.pojo;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -306,7 +307,6 @@ public void setBorrowedBooks(List<Book> borrowedBooks) {
 	    books.removeIf(book -> book.getBookId() == id);
 	}
    
-   
    public List<PrivateRoom> getAllRooms()
    {
 	   return this.rooms;
@@ -353,5 +353,31 @@ public void setBorrowedBooks(List<Book> borrowedBooks) {
 	   occupiedRooms.add(roomDetails);
    }
 
-	
+	public List<Book> searchBooks(List<Book> books, String query) {
+		return books.stream()
+				.filter(book -> book.getTitle().toLowerCase().contains(query.toLowerCase())
+						|| book.getAuthor().toLowerCase().contains(query.toLowerCase())
+						|| book.getGenre().toLowerCase().contains(query.toLowerCase())
+						|| book.getLanguage().toLowerCase().contains(query.toLowerCase()))
+				.toList();
+	}
+
+	public List<Librarian> searchLibrarians(List<Librarian> librarians, String query) {
+		return librarians.stream()
+				.filter(librarian -> librarian.getFirstName().toLowerCase().contains(query.toLowerCase())
+						|| librarian.getLastName().toLowerCase().contains(query.toLowerCase())
+						|| librarian.getUsername().toLowerCase().contains(query.toLowerCase())
+						|| librarian.getRole().toLowerCase().contains(query.toLowerCase()))
+				.toList();
+	}
+
+	public List<Application> searchApplications(List<Application> applications, String query) {
+		return applications.stream()
+				.filter(application -> application.getFirstName().toLowerCase().contains(query.toLowerCase())
+						|| application.getLastName().toLowerCase().contains(query.toLowerCase())
+						|| application.getReason().toLowerCase().contains(query.toLowerCase())
+						|| application.getExperience().toLowerCase().contains(query.toLowerCase()))
+				.toList();
+	}
+
  }
