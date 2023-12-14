@@ -4,24 +4,22 @@ import java.util.List;
 
 import java.util.ArrayList;
 
-public class Librarian extends Person{
-	
+public class Librarian extends Person {
 
-	
 	private int id;
-	
-	private int hoursWorked;
-	
+
+	private double hoursWorked;
+
 	private List<Book> borrowRequests;
-	
+
 	private List<Book> returnRequests;
-	
+
 	public Librarian() {
-		
+
 		borrowRequests = new ArrayList<>();
 		returnRequests = new ArrayList<>();
 		hoursWorked = 0;
-		
+
 	}
 
 	public int getId() {
@@ -32,12 +30,12 @@ public class Librarian extends Person{
 		this.id = id;
 	}
 
-	public int getHoursWorked() {
+	public double getHoursWorked() {
 		return hoursWorked;
 	}
 
-	public void setHoursWorked(int hoursWorked) {
-		this.hoursWorked = hoursWorked;
+	public void setHoursWorked(double newHoursWorked) {
+		this.hoursWorked = newHoursWorked;
 	}
 
 	public List<Book> getBorrowRequests() {
@@ -55,9 +53,5 @@ public class Librarian extends Person{
 	public void setReturnRequests(List<Book> returnRequests) {
 		this.returnRequests = returnRequests;
 	}
-	
-	
-	
-	
-	
+
 }
