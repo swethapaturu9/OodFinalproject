@@ -1,5 +1,8 @@
 package com.oodProject.library.controller;
 
-public class RoomController {
+import org.springframework.stereotype.Controller;
 
+@Controller
+public class RoomController {
+	
 }
