@@ -10,6 +10,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            overflow-x: hidden;
 		}
         .search{
             display: flex;
@@ -39,26 +40,46 @@
             </div>
             <hr/>
             <h2>Books in Library</h2>
-            <table class="table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Genre</th>
-                        <th>Language</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="book : ${books}">
-                        <td th:text="${book.bookId}"></td>
-                        <td th:text="${book.title}"></td>
-                        <td th:text="${book.author}"></td>
-                        <td th:text="${book.genre}"></td>
-                        <td th:text="${book.language}"></td>
-                    </tr>
-                </tbody>
-            </table>
+            <form th:action="@{/AdminLogin/sortbooks}" method="get" id="sortForm">
+                <input type="hidden" id="sortBy" name="sortBy" value="" />
+                <div class="table-responsive">
+                    <table class="table-striped" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>
+                                    ID
+                                    <button type="button" class="btn btn-link btn-sm" onclick="sortTable('Id')">Sort</button>
+                                </th>
+                                <th>
+                                    Title
+                                    <button type="button" class="btn btn-link btn-sm" onclick="sortTable('Title')">Sort</button>
+                                </th>
+                                <th>
+                                    Author
+                                    <button type="button" class="btn btn-link btn-sm" onclick="sortTable('Author')">Sort</button>
+                                </th>
+                                <th>
+                                    Genre
+                                    <button type="button" class="btn btn-link btn-sm" onclick="sortTable('Genre')">Sort</button>
+                                </th>
+                                <th>
+                                    Language
+                                    <button type="button" class="btn btn-link btn-sm" onclick="sortTable('Language')">Sort</button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="book : ${books}">
+                                <td th:text="${book.bookId}"></td>
+                                <td th:text="${book.title}"></td>
+                                <td th:text="${book.author}"></td>
+                                <td th:text="${book.genre}"></td>
+                                <td th:text="${book.language}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
         </div>
         <div class="card px-5 pt-4 pb-5 mb-5">
             <div class="search">
@@ -166,5 +187,11 @@
             <a class="text-white text-decoration-none m-3" th:href="@{/}">Home</a>
         </div>
     </div>
+    <script>
+        function sortTable(sortBy) {
+            document.getElementById('sortBy').value = sortBy || "Default";
+            document.getElementById('sortForm').submit();
+        }
+    </script>
 </body>
 </html>

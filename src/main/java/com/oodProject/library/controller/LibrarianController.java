@@ -116,7 +116,7 @@ public class LibrarianController {
 		libraryService.deleteBook(member.getBorrowRequests(), bookId);
 		
 		
-		libraryService.deleteBook(libraryService.getAllBooks(), bookId);
+		libraryService.deleteBook(libraryService.getAllBooks(""), bookId);
 		
 		
 		Librarian librarian = (Librarian) session.getAttribute("librarian");

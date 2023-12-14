@@ -108,8 +108,34 @@ import com.oodProject.library.util.CsvFileUtil;
 	    }
 	 
 	 
-	 public List<Book> getAllBooks() {
-	        return books;
+		public List<Book> getAllBooks(String sortBy) {
+
+			if (sortBy.equals("Genre")) {
+
+				books.sort(Book.GENRE_COMPARATOR);
+				return books;
+			}
+			if (sortBy.equals("Title")) {
+
+				
+				books.sort(Book.TITLE_COMPARATOR);
+				return books;
+			}
+			if (sortBy.equals("Author")) {
+
+				books.sort(Book.AUTHOR_COMPARATOR);
+				return books;
+			}
+			if (sortBy.equals("Language")) {
+
+				books.sort(Book.LANGUAGE_COMPARATOR);
+				return books;
+			}
+
+
+	        books.sort(Book.ID_COMPARATOR);
+
+			return books;
 	    }
 	 
 	 
@@ -305,6 +331,7 @@ public void setBorrowedBooks(List<Book> borrowedBooks) {
    
    public void deleteBook(List<Book> books, int id) {
 	    books.removeIf(book -> book.getBookId() == id);
+		System.out.println("Removed book with " + id);
 	}
    
    public List<PrivateRoom> getAllRooms()
