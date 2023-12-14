@@ -18,130 +18,136 @@ import com.oodProject.library.pojo.Member;
 
 import jakarta.servlet.http.HttpSession;
 
-
 @Controller
 public class LibrarianController {
-	
-	
+
 	@Autowired
 	private final Library libraryService;
 
-    public LibrarianController(Library libraryService) {
-        this.libraryService = libraryService;
-    }
-	
+	public LibrarianController(Library libraryService) {
+		this.libraryService = libraryService;
+	}
+
 	@GetMapping("/applyLibrarian")
 	public String applyLibrarian(Model model) {
-		
-		
+
 		Application application = new Application();
-		
-		
-		
+
 		model.addAttribute("application", application);
-	        return "apply_Librarian";
+		return "apply_Librarian";
 	}
-	
-	
+
 	@PostMapping("/applyLibrarian")
-    public String createLibrarian(@ModelAttribute("application") Application application, Model model) {
-		
-		
-	    libraryService.addApplication(application);
-	    
-	   
-	    for(Application app: libraryService.getAllApplications()) {
-	    	
-	    	System.out.println(app.getId());
-	    	
-	    }
-		
+	public String createLibrarian(@ModelAttribute("application") Application application, Model model) {
+
+		libraryService.addApplication(application);
+
+		for (Application app : libraryService.getAllApplications()) {
+
+			System.out.println(app.getId());
+
+		}
+
 		model.addAttribute("message", "Application submitted successfully!");
 
-        return "apply_Librarian";
-		
-		
+		return "apply_Librarian";
+
 	}
-	
-	
-	@PostMapping("/LibrarianLogin") 
-	public String loginCheck(@RequestParam String username, @RequestParam String password, Model model, HttpSession session) {
-		
+
+	@PostMapping("/LibrarianLogin")
+	public String loginCheck(@RequestParam String username, @RequestParam String password, Model model,
+			HttpSession session) {
+
 		if (libraryService.authenticateLibrarian(username, password)) {
-			
+
 			Librarian librarian = libraryService.getLibrarianByusername(username);
-			
+
 			session.setAttribute("librarian", librarian);
-			
-			List<Book> returnRequests = libraryService.getReturnRequests(librarian);			
+
+			List<Book> returnRequests = libraryService.getReturnRequests(librarian);
 			List<Book> borrowRequests = libraryService.getBorrowRequests(librarian);
-			
-		
-			model.addAttribute("borrowRequests",borrowRequests);
-			model.addAttribute("returnRequests",returnRequests);
-			model.addAttribute("librarian",librarian);
-			
+
+			model.addAttribute("borrowRequests", borrowRequests);
+			model.addAttribute("returnRequests", returnRequests);
+			model.addAttribute("librarian", librarian);
+
 			return "librarian_home";
-			
-     	   
-     } 
-     	
-       model.addAttribute("errorMessage", "Invalid credentials");
-       return "librarian_login"; 
-    
-		
+
+		}
+
+		model.addAttribute("errorMessage", "Invalid credentials");
+		return "librarian_login";
+
 	}
-	
-	
+
 	@PostMapping("/acceptBorrowRequest")
 	public String acceptBorrowRequest(@RequestParam("bookId") int bookId, HttpSession session, Model model) {
-		
-		Book book = libraryService.getBookByid(bookId);
-		
-		Member member = book.getBorrowedBy();
-		
-		System.out.println("borrowed by" + member.getFirstName());
-		
-	
-		book.setBorrowed(true);
-		
-		libraryService.getBorrowedBooks().add(book);
-		
-		
-		member.getBooksBorrowed().add(book);
-		
-		System.out.println("borrow request size" + member.getBorrowRequests().size());
-			
-		
-		libraryService.deleteBook(member.getBorrowRequests(), bookId);
-		
-		
-		libraryService.deleteBook(libraryService.getAllBooks(""), bookId);
-		
-		
-		Librarian librarian = (Librarian) session.getAttribute("librarian");
-		
-		
 
-		
+		Book book = libraryService.getBookByid(bookId);
+
+		Member member = book.getBorrowedBy();
+
+		System.out.println("borrowed by" + member.getFirstName());
+
+		book.setBorrowed(true);
+
+		libraryService.getBorrowedBooks().add(book);
+
+		member.getBooksBorrowed().add(book);
+
+		System.out.println("borrow request size" + member.getBorrowRequests().size());
+
+		libraryService.deleteBook(member.getBorrowRequests(), bookId);
+
+		libraryService.deleteBook(libraryService.getAllBooks(""), bookId);
+
+		Librarian librarian = (Librarian) session.getAttribute("librarian");
+
 		System.out.println("librarian" + librarian.getFirstName());
-		
+
 		System.out.println("lib borrow request size" + librarian.getBorrowRequests().size());
-		
-		
-		
+
 		libraryService.deleteBook(librarian.getBorrowRequests(), bookId);
-		
+
 		model.addAttribute("message", "borrow request accepted");
-		
-		model.addAttribute("librarian",librarian);
-	
+
+		model.addAttribute("librarian", librarian);
+
 		return "librarian_home";
-		
 
 	}
-	
-	
-	
+
+	@PostMapping("/updateHoursWorked")
+	public String updateHoursWorked(
+			@RequestParam double totalHours,
+			HttpSession session,
+			Model model) {
+
+		// Retrieve the librarian object from the session or by username
+		Librarian librarian = (Librarian) session.getAttribute("librarian");
+
+		// Check if the librarian object exists
+		if (librarian != null) {
+			// Update the hoursWorked attribute with the total hours
+			librarian.setHoursWorked(totalHours);
+
+			// Add success message to model and return to the librarian home page
+			model.addAttribute("librarian", librarian);
+			return "librarian_home";
+		} else {
+			// Handle the case where the librarian object is not found
+			model.addAttribute("errorMessage", "Librarian not found.");
+			return "error_page";
+		}
+	}
+
+	@GetMapping("/updateHoursWorked")
+	public String updateHours(Model model) {
+
+		Application application = new Application();
+
+		model.addAttribute("application", application);
+		return "librarian_time_sheet";
+	}
 
 }
