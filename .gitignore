@@ -2,4 +2,7 @@
 .project
 .classpath
 
+
+/target/
+
 HELP.md
