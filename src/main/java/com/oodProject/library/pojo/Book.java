@@ -1,5 +1,6 @@
 package com.oodProject.library.pojo;
 
+import java.util.Comparator;
 import java.util.Date;
 
 public class Book {
@@ -13,6 +14,12 @@ public class Book {
 	 private boolean isBorrowed;
 	 private Date borrowedDate;
 	 private Member borrowedBy;
+
+	 public static final Comparator<Book> TITLE_COMPARATOR = Comparator.comparing(Book::getTitle);
+	 public static final Comparator<Book> AUTHOR_COMPARATOR = Comparator.comparing(Book::getAuthor);
+	 public static final Comparator<Book> GENRE_COMPARATOR = Comparator.comparing(Book::getGenre);
+	 public static final Comparator<Book> LANGUAGE_COMPARATOR = Comparator.comparing(Book::getLanguage);
+	 public static final Comparator<Book> ID_COMPARATOR = Comparator.comparing(Book::getBookId);
 	 
 	 
 	 

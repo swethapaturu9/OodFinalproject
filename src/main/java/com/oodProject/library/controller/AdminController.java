@@ -46,7 +46,7 @@ public class AdminController {
         		
         		session.setAttribute("admin", admin);
         		
-        	   List<Book> books = libraryService.getAllBooks();
+        	   List<Book> books = libraryService.getAllBooks("Default");
         	   List<Application> applications = libraryService.getAllApplications();
         	   List<Librarian> librarians = libraryService.getAllLibrarians();
         	   List<PrivateRoom> privateRooms = libraryService.getAllRooms();
@@ -62,6 +62,42 @@ public class AdminController {
             return "admin_login"; 
         }
     }
+
+	@GetMapping("/AdminLogin/sortbooks")
+    public String sortBooks(@RequestParam(required = false) String sortBy, 
+                                   Model model, HttpSession session) {
+			
+		
+				if (validateUser(session)) {
+				if (sortBy == null) {
+					sortBy = "";
+				}
+		       List<Book> books = libraryService.getAllBooks(sortBy);
+        	   List<Application> applications = libraryService.getAllApplications();
+        	   List<Librarian> librarians = libraryService.getAllLibrarians();
+        	   List<PrivateRoom> privateRooms = libraryService.getAllRooms();
+               model.addAttribute("books", books);
+               model.addAttribute("applications", applications);
+               model.addAttribute("librarians",librarians);
+               model.addAttribute("privaterooms", privateRooms);
+               
+               return "admin_dashboard"; 
+				}												
+				else {
+        	
+            model.addAttribute("errorMessage", "Invalid credentials");
+            return "redirect:/";	
+        }
+    }
+
+	private boolean validateUser(HttpSession session)
+	{
+		if (session.isNew()) {
+			return false;
+		}
+		Person admin = (Person)session.getAttribute("admin");
+		return libraryService.authenticateAdmin(admin.getUsername(), admin.getPassword());
+	}
     
     @PostMapping("/acceptApplication")
     public String acceptApplication(@RequestParam("applicationId") int applicationId, Model model, HttpSession session) {
@@ -93,7 +129,7 @@ public class AdminController {
     	
     	 libraryService.getAllApplications().remove(declinedApplication);
     	 
-       List<Book> books = libraryService.getAllBooks();
+       List<Book> books = libraryService.getAllBooks("");
   	   List<Application> applications = libraryService.getAllApplications();
   	   List<Librarian> librarians = libraryService.getAllLibrarians();
          model.addAttribute("books", books);
@@ -144,7 +180,7 @@ public class AdminController {
     
 	@GetMapping("/admin/searchBooks")
 	public String searchBooks(@RequestParam String keyword, Model model) {
-		List<Book> books = libraryService.searchBooks(libraryService.getAllBooks(), keyword);
+		List<Book> books = libraryService.searchBooks(libraryService.getAllBooks(""), keyword);
 		if (books.isEmpty()) {
 			model.addAttribute("errorMessage", "No books found for the given keyword");
 		} else {

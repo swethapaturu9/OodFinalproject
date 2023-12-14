@@ -61,7 +61,7 @@ public class MemberController {
 		    List<Book> borrowedBooks = member.getBooksBorrowed();
 			
 			
-	        List<Book> books = libraryService.getAllBooks();
+	        List<Book> books = libraryService.getAllBooks("");
 			
 		    List<PrivateRoom> rooms = member.getRoomsBooked();
 		    
@@ -163,7 +163,7 @@ public class MemberController {
     
 	@GetMapping("/member/searchBooks")
 	public String searchBooks(@RequestParam String keyword, Model model, HttpSession session) {
-		List<Book> books = libraryService.searchBooks(libraryService.getAllBooks(), keyword);
+		List<Book> books = libraryService.searchBooks(libraryService.getAllBooks(""), keyword);
 		if (books.isEmpty()) {
 			model.addAttribute("errorMessage", ERRORMESSAGE);
 		} else {
