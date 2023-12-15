@@ -54,8 +54,33 @@ public class LibrarianController {
 
 	}
 
+	@GetMapping("/LibrarianLogin")
+	public String libraianLogin(Model model, HttpSession session) {
+
+		if (session.isNew()) {
+			return "librarian_login";
+		}
+		else {
+			if (session.getAttribute("librarian") != null) {
+				return loginCheckLibrarian(((Librarian)session.getAttribute("librarian")).getUsername(),((Librarian)session.getAttribute("librarian")).getPassword(),model, session );
+			}
+			session.invalidate();
+			return "librarian_login";
+		}
+		
+	}
+
+	@GetMapping("/LibrarianLogout") 
+	public String removePerson(Model model,  HttpSession session) {
+		
+		session.removeAttribute("librarian");
+		
+		return "redirect:/LibrarianLogin";
+		
+	}
+
 	@PostMapping("/LibrarianLogin")
-	public String loginCheck(@RequestParam String username, @RequestParam String password, Model model,
+	public String loginCheckLibrarian(@RequestParam String username, @RequestParam String password, Model model,
 			HttpSession session) {
 
 		if (libraryService.authenticateLibrarian(username, password)) {

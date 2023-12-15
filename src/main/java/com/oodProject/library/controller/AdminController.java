@@ -34,6 +34,31 @@ public class AdminController {
         this.libraryService = libraryService;
     }
 
+	@GetMapping("/AdminLogin") 
+	public String createPerson(Model model,  HttpSession session) {
+
+		if (session.isNew()) {
+			return "admin_login";
+		}
+		else {
+			if (session.getAttribute("admin") != null) {
+				return handleAdminLogin(((Person)session.getAttribute("admin")).getUsername(),((Person)session.getAttribute("admin")).getPassword(), model,session );
+			}
+			session.invalidate();
+			return "admin_login";
+		}
+		
+	}
+
+	@GetMapping("/AdminLogout") 
+	public String removePerson(Model model,  HttpSession session) {
+		
+		session.removeAttribute("admin");
+		
+		return "redirect:/AdminLogin";
+		
+	}
+
     @PostMapping("/AdminLogin")
     public String handleAdminLogin(@RequestParam String username, 
                                    @RequestParam String password, 
