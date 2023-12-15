@@ -253,4 +253,22 @@ public class MemberController {
     	return "request_success";
     }
 
+	@PostMapping("/checkoutPrivateRoom")
+	public String checkOutPrivateRoom(@RequestParam("roomId") int roomId, HttpSession session, Model model)
+	{
+		Member member = (Member) session.getAttribute("member");
+		PrivateRoom room = libraryService.getRoomById(roomId);
+    	
+    	room.setRentedBy(member);
+		room.setToDateTime(null);
+		room.setFromDateTime(null);
+		room.setOccupied(false);
+		room.setRentedBy(null);
+		libraryService.makeRoomAvailable(room);
+		member.getRoomsBooked().remove(room);
+    	
+    	libraryService.removeRoomFromAvailablity(libraryService.getAvailableRooms(), roomId);
+		return "room_checkout";
+	}
+
 }

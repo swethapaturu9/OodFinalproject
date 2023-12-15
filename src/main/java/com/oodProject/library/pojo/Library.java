@@ -355,6 +355,11 @@ public void setBorrowedBooks(List<Book> borrowedBooks) {
 	   addRoomsToOccupiedStatus(roomId);
 	   
    }
+
+   public void makeRoomAvailable(PrivateRoom room)
+   {
+		availableRooms.add(room);
+   }
    
    public PrivateRoom getRoomById(int roomId)
    {

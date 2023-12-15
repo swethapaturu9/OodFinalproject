@@ -228,7 +228,7 @@
             <thead>
             <tr>
                 <th>ID</th>
-                <th>Number</th>>
+                <th>Number</th>
                 <th>From</th>
                 <th>To</th>
             </tr>
@@ -239,6 +239,13 @@
                 <td th:text="${room.roomNumber}"></td>
                 <td th:text="${room.fromDateTime}"></td>
                 <td th:text="${room.toDateTime}"></td>
+                <form th:action="@{/checkoutPrivateRoom}" method="post">
+                    <input type="hidden" name="roomId" th:value="${room.roomId}" />
+                    <td>
+                        <button type="submit" class="btn btn-primary">Check out</button>
+                    </td>
+                </form>
+                
             </tr>
             </tbody>
         </table>
