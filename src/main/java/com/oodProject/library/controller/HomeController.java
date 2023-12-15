@@ -20,27 +20,4 @@ public class HomeController {
 		
 	}
 	
-	
-	@GetMapping("/AdminLogin") 
-	public String createPerson(Model model) {
-		
-	
-		
-		return "admin_login";
-		
-	}
-	
-	@GetMapping("/LibrarianLogin")
-	public String libraianLogin(Model model) {
-		
-		return "librarian_login";
-	}
-	
-	
-	@GetMapping("/MemberLogin")
-	public String memberLogin(Model model) {
-		
-	        return "member_login";
-	}
-
 }
