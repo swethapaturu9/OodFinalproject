@@ -89,9 +89,11 @@ public class LibrarianController {
 
 			session.setAttribute("librarian", librarian);
 
+			List<Book> books 	      = libraryService.getAllBooks("");
 			List<Book> returnRequests = libraryService.getReturnRequests(librarian);
 			List<Book> borrowRequests = libraryService.getBorrowRequests(librarian);
 
+			model.addAttribute("books", books);
 			model.addAttribute("borrowRequests", borrowRequests);
 			model.addAttribute("returnRequests", returnRequests);
 			model.addAttribute("librarian", librarian);
@@ -137,6 +139,17 @@ public class LibrarianController {
 		model.addAttribute("message", "borrow request accepted");
 
 		model.addAttribute("librarian", librarian);
+
+		List<Book> books = libraryService.getAllBooks("");
+		model.addAttribute("books",books );
+
+
+		List<Book> borrowRequests = librarian.getBorrowRequests();
+
+		List<Book> returnRequests = librarian.getReturnRequests();
+
+		model.addAttribute("returnRequests", returnRequests);
+		model.addAttribute("borrowRequests", borrowRequests);
 
 		return "librarian_home";
 
