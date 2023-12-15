@@ -268,7 +268,31 @@ public class MemberController {
 		member.getRoomsBooked().remove(room);
     	
     	libraryService.removeRoomFromAvailablity(libraryService.getAvailableRooms(), roomId);
+
 		return "room_checkout";
+	}
+
+	@PostMapping("/returnBook") 
+	public String returnBooks(@RequestParam("bookId") int id, HttpSession session, Model model ) 
+	{
+		Member member = (Member) session.getAttribute("member");
+
+		List<Book> booksBorrowed = member.getBooksBorrowed();
+		List<Book> booksToRemove = new ArrayList<>();
+
+       for(Book book : booksBorrowed) {
+         if(book.getBookId() == id) {
+            libraryService.getAllBooks("").add(book);
+            booksToRemove.add(book); 
+        }
+      }
+
+    for(Book book : booksToRemove) {
+        booksBorrowed.remove(book);
+    }
+
+        return "success_page";
+    
 	}
 
 }

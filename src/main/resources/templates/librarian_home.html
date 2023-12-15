@@ -29,6 +29,53 @@
         <h1 class="text-center mb-5" th:text="'Hello! ' + ${librarian.firstName} + ' ' + ${librarian.lastName}">
             Librarian Details</h1>
 
+            <h2>Books in Library</h2>
+            <form th:action="@{/AdminLogin/sortbooks}" method="get" id="sortForm">
+                <input type="hidden" id="sortBy" name="sortBy" value="" />
+                <div class="table-responsive">
+                    <table class="table-striped" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>
+                                    ID
+                                    <button type="button" class="btn btn-link btn-sm"
+                                        onclick="sortTable('Id')">Sort</button>
+                                </th>
+                                <th>
+                                    Title
+                                    <button type="button" class="btn btn-link btn-sm"
+                                        onclick="sortTable('Title')">Sort</button>
+                                </th>
+                                <th>
+                                    Author
+                                    <button type="button" class="btn btn-link btn-sm"
+                                        onclick="sortTable('Author')">Sort</button>
+                                </th>
+                                <th>
+                                    Genre
+                                    <button type="button" class="btn btn-link btn-sm"
+                                        onclick="sortTable('Genre')">Sort</button>
+                                </th>
+                                <th>
+                                    Language
+                                    <button type="button" class="btn btn-link btn-sm"
+                                        onclick="sortTable('Language')">Sort</button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="book : ${books}">
+                                <td th:text="${book.bookId}"></td>
+                                <td th:text="${book.title}"></td>
+                                <td th:text="${book.author}"></td>
+                                <td th:text="${book.genre}"></td>
+                                <td th:text="${book.language}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+
         <h2 class="mb-3 mt-3">Borrow Requests</h2>
         <table class="table table-bordered">
             <thead>
@@ -68,25 +115,7 @@
         </table>
 
 
-        <h2 class="mb-3 mt-3">Return Requests</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <!-- Add more headers as per Book attributes -->
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="book : ${returnRequests}">
-                    <td th:text="${book.bookId}"></td>
-                    <td th:text="${book.title}"></td>
-                    <td th:text="${book.author}"></td>
-                    <!-- Add more cells as per Book attributes -->
-                </tr>
-            </tbody>
-        </table>
+
 
 
     </div>
