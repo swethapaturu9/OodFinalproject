@@ -21,6 +21,9 @@
             </h2>
         </div>
     </div>
+    <div class="container mt-5 text-right">
+        <a th:href="@{/LibrarianLogout}" class="btn btn-danger">Logout</a>
+    </div>
     <div class="container" style="margin-top: 50px;">
 
         <h1 class="text-center mb-5" th:text="'Hello! ' + ${librarian.firstName} + ' ' + ${librarian.lastName}">

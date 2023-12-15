@@ -17,6 +17,7 @@ import com.oodProject.library.pojo.Book;
 import com.oodProject.library.pojo.Librarian;
 import com.oodProject.library.pojo.Library;
 import com.oodProject.library.pojo.Member;
+import com.oodProject.library.pojo.Person;
 import com.oodProject.library.pojo.PrivateRoom;
 import com.oodProject.library.util.CsvFileUtil;
 
@@ -36,6 +37,29 @@ public class MemberController {
     public MemberController(Library libraryService) {
         this.libraryService = libraryService;
     }
+
+	@GetMapping("/MemberLogin")
+	public String memberLogin(Model model, HttpSession session) {
+		if (session.isNew()) {
+			return "member_login";
+		}
+		else {
+			if (session.getAttribute("member") != null) {
+				return loginCheck(((Member)session.getAttribute("member")).getUsername(),session,((Member)session.getAttribute("member")).getPassword(), model );
+			}
+			session.invalidate();
+			return "member_login";
+		}
+	}
+
+	@GetMapping("/MemberLogout") 
+	public String removePerson(Model model,  HttpSession session) {
+		
+		session.removeAttribute("member");
+		
+		return "redirect:/MemberLogin";
+		
+	}
     
     
     @PostMapping("/MemberLogin") 
